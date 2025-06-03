@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Mapa de EE.UU. con Banderas Estatales</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <style>
+    html, body, #map {
+      height: 100%; margin: 0; font-family: 'Segoe UI', sans-serif; background-color: #0d1117; color: #f0f6fc;
+    }
+    h1 {
+      text-align: center;
+      font-size: 24px;
+      color: #58a6ff;
+      margin: 10px 0;
+    }
+    .flag-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      object-fit: cover;
+      box-shadow: 0 0 2px rgba(255,255,255,0.4);
+    }
+  </style>
+</head>
+<body>
+  <h1>🗺️ Mapa de Estados Unidos <img src="https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_States.svg" width="28" style="vertical-align:middle;"> con Centros Estatales</h1>
+  <div id="map"></div>
+
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script>
+    var map = L.map('map').setView([39.5, -98.35], 4);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18 }).addTo(map);
+
+    const estados = {
+      "AL": [32.806671, -86.791130, 200, "Alabama", "https://upload.wikimedia.org/wikipedia/commons/5/5c/Flag_of_Alabama.svg"],
+      "AK": [61.370716, -152.404419, 1200, "Alaska", "https://upload.wikimedia.org/wikipedia/commons/e/e6/Flag_of_Alaska.svg"],
+      "AZ": [33.729759, -111.431221, 400, "Arizona", "https://upload.wikimedia.org/wikipedia/commons/9/9d/Flag_of_Arizona.svg"],
+      "AR": [34.969704, -92.373123, 250, "Arkansas", "https://upload.wikimedia.org/wikipedia/commons/9/9d/Flag_of_Arkansas.svg"],
+      "CA": [36.116203, -119.681564, 600, "California", "https://upload.wikimedia.org/wikipedia/commons/0/01/Flag_of_California.svg"],
+      "CO": [39.059811, -105.311104, 400, "Colorado", "https://upload.wikimedia.org/wikipedia/commons/4/46/Flag_of_Colorado.svg"],
+      "CT": [41.597782, -72.755371, 80, "Connecticut", "https://upload.wikimedia.org/wikipedia/commons/9/96/Flag_of_Connecticut.svg"],
+      "DE": [39.318523, -75.507141, 60, "Delaware", "https://upload.wikimedia.org/wikipedia/commons/c/c6/Flag_of_Delaware.svg"],
+      "FL": [27.766279, -81.686783, 350, "Florida", "https://upload.wikimedia.org/wikipedia/commons/f/f7/Flag_of_Florida.svg"],
+      "GA": [33.040619, -83.643074, 300, "Georgia", "https://upload.wikimedia.org/wikipedia/commons/5/54/Flag_of_Georgia_(U.S._state).svg"],
+      "HI": [21.094318, -157.498337, 200, "Hawaii", "https://upload.wikimedia.org/wikipedia/commons/e/ef/Flag_of_Hawaii.svg"],
+      "ID": [44.240459, -114.478828, 450, "Idaho", "https://upload.wikimedia.org/wikipedia/commons/a/a4/Flag_of_Idaho.svg"],
+      "IL": [40.349457, -88.986137, 300, "Illinois", "https://upload.wikimedia.org/wikipedia/commons/0/01/Flag_of_Illinois.svg"],
+      "IN": [39.849426, -86.258278, 200, "Indiana", "https://upload.wikimedia.org/wikipedia/commons/a/ac/Flag_of_Indiana.svg"],
+      "IA": [42.011539, -93.210526, 300, "Iowa", "https://upload.wikimedia.org/wikipedia/commons/a/aa/Flag_of_Iowa.svg"],
+      "KS": [38.526600, -96.726486, 350, "Kansas", "https://upload.wikimedia.org/wikipedia/commons/d/da/Flag_of_Kansas.svg"],
+      "KY": [37.668140, -84.670067, 250, "Kentucky", "https://upload.wikimedia.org/wikipedia/commons/8/8d/Flag_of_Kentucky.svg"],
+      "LA": [31.169546, -91.867805, 250, "Louisiana", "https://upload.wikimedia.org/wikipedia/commons/e/e0/Flag_of_Louisiana.svg"],
+      "ME": [44.693947, -69.381927, 250, "Maine", "https://upload.wikimedia.org/wikipedia/commons/3/35/Flag_of_Maine.svg"],
+      "MD": [39.063946, -76.802101, 150, "Maryland", "https://upload.wikimedia.org/wikipedia/commons/a/a0/Flag_of_Maryland.svg"],
+      "MA": [42.230171, -71.530106, 150, "Massachusetts", "https://upload.wikimedia.org/wikipedia/commons/f/f2/Flag_of_Massachusetts.svg"],
+      "MI": [43.326618, -84.536095, 400, "Michigan", "https://upload.wikimedia.org/wikipedia/commons/b/b5/Flag_of_Michigan.svg"],
+      "MN": [45.694454, -93.900192, 450, "Minnesota", "https://upload.wikimedia.org/wikipedia/commons/b/b9/Flag_of_Minnesota.svg"],
+      "MS": [32.741646, -89.678696, 200, "Mississippi", "https://upload.wikimedia.org/wikipedia/commons/4/42/Flag_of_Mississippi.svg"],
+      "MO": [38.456085, -92.288368, 350, "Missouri", "https://upload.wikimedia.org/wikipedia/commons/5/5a/Flag_of_Missouri.svg"],
+      "MT": [46.921925, -110.454353, 600, "Montana", "https://upload.wikimedia.org/wikipedia/commons/c/cb/Flag_of_Montana.svg"],
+      "NE": [41.125370, -98.268082, 400, "Nebraska", "https://upload.wikimedia.org/wikipedia/commons/4/4d/Flag_of_Nebraska.svg"],
+      "NV": [38.313515, -117.055374, 500, "Nevada", "https://upload.wikimedia.org/wikipedia/commons/f/f1/Flag_of_Nevada.svg"],
+      "NH": [43.452492, -71.563896, 100, "New Hampshire", "https://upload.wikimedia.org/wikipedia/commons/2/28/Flag_of_New_Hampshire.svg"],
+      "NJ": [40.298904, -74.521011, 100, "New Jersey", "https://upload.wikimedia.org/wikipedia/commons/9/92/Flag_of_New_Jersey.svg"],
+      "NM": [34.840515, -106.248482, 500, "New Mexico", "https://upload.wikimedia.org/wikipedia/commons/c/c3/Flag_of_New_Mexico.svg"],
+      "NY": [42.165726, -74.948051, 300, "New York", "https://upload.wikimedia.org/wikipedia/commons/1/1a/Flag_of_New_York.svg"],
+      "NC": [35.630066, -79.806419, 300, "North Carolina", "https://upload.wikimedia.org/wikipedia/commons/b/bb/Flag_of_North_Carolina.svg"],
+      "ND": [47.528912, -99.784012, 400, "North Dakota", "https://upload.wikimedia.org/wikipedia/commons/e/ee/Flag_of_North_Dakota.svg"],
+      "OH": [40.388783, -82.764915, 300, "Ohio", "https://upload.wikimedia.org/wikipedia/commons/4/4c/Flag_of_Ohio.svg"],
+      "OK": [35.565342, -96.928917, 300, "Oklahoma", "https://upload.wikimedia.org/wikipedia/commons/6/6e/Flag_of_Oklahoma.svg"],
+      "OR": [44.572021, -122.070938, 450, "Oregon", "https://upload.wikimedia.org/wikipedia/commons/b/b9/Flag_of_Oregon.svg"],
+      "PA": [40.590752, -77.209755, 300, "Pennsylvania", "https://upload.wikimedia.org/wikipedia/commons/f/f7/Flag_of_Pennsylvania.svg"],
+      "RI": [41.680893, -71.511780, 50, "Rhode Island", "https://upload.wikimedia.org/wikipedia/commons/f/f3/Flag_of_Rhode_Island.svg"],
+      "SC": [33.856892, -80.945007, 200, "South Carolina", "https://upload.wikimedia.org/wikipedia/commons/6/69/Flag_of_South_Carolina.svg"],
+      "SD": [44.299782, -99.438828, 450, "South Dakota", "https://upload.wikimedia.org/wikipedia/commons/1/1a/Flag_of_South_Dakota.svg"],
+      "TN": [35.747845, -86.692345, 250, "Tennessee", "https://upload.wikimedia.org/wikipedia/commons/9/9e/Flag_of_Tennessee.svg"],
+      "TX": [31.054487, -97.563461, 800, "Texas", "https://upload.wikimedia.org/wikipedia/commons/f/f7/Flag_of_Texas.svg"],
+      "UT": [40.150032, -111.862434, 350, "Utah", "https://upload.wikimedia.org/wikipedia/commons/f/f6/Flag_of_Utah.svg"],
+      "VT": [44.045876, -72.710686, 150, "Vermont", "https://upload.wikimedia.org/wikipedia/commons/4/49/Flag_of_Vermont.svg"],
+      "VA": [37.769337, -78.169968, 300, "Virginia", "https://upload.wikimedia.org/wikipedia/commons/4/47/Flag_of_Virginia.svg"],
+      "WA": [47.400902, -121.490494, 450, "Washington", "https://upload.wikimedia.org/wikipedia/commons/5/54/Flag_of_Washington.svg"],
+      "WV": [38.491226, -80.954453, 200, "West Virginia", "https://upload.wikimedia.org/wikipedia/commons/2/22/Flag_of_West_Virginia.svg"],
+      "WI": [44.268543, -89.616508, 350, "Wisconsin", "https://upload.wikimedia.org/wikipedia/commons/2/22/Flag_of_Wisconsin.svg"],
+      "WY": [42.755966, -107.302490, 400, "Wyoming", "https://upload.wikimedia.org/wikipedia/commons/b/bc/Flag_of_Wyoming.svg"]
+    };
+
+    for (const [code, [lat, lon, radius, name, flagURL]] of Object.entries(estados)) {
+      const icon = L.divIcon({
+        html: `<img class="flag-icon" src="${flagURL}" title="${name}" />`,
+        className: '',
+        iconSize: [28, 28]
+      });
+      L.marker([lat, lon], { icon: icon })
+        .addTo(map)
+        .bindPopup(`<strong>${name}</strong><br>📍 Coordenadas: ${lat.toFixed(2)}, ${lon.toFixed(2)}<br>📏 Radio aprox.: ${radius} km`);
+    }
+  </script>
+</body>
+</html>
